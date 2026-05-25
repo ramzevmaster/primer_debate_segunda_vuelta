@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Debate Técnico Perú 2026 | Análisis y Resultados</title>
+    <!-- Bootstrap 5 CSS + Icons + Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background-color: #f4f7fc;
+            overflow-x: hidden;
+        }
+        /* Sidebar ejecutivo oscuro */
+        .sidebar {
+            background: linear-gradient(180deg, #0b2b3b 0%, #0a1c2a 100%);
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.08);
+            z-index: 1050;
+        }
+        .sidebar .nav-link {
+            color: #e0eef5;
+            border-radius: 12px;
+            margin: 6px 12px;
+            padding: 12px 16px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: #1e6f5c;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transform: translateX(4px);
+        }
+        .sidebar .nav-link i {
+            margin-right: 12px;
+            font-size: 1.25rem;
+            width: 28px;
+            text-align: center;
+        }
+        .brand {
+            padding: 24px 16px 16px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            margin-bottom: 16px;
+        }
+        .brand h3 {
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: -0.3px;
+        }
+        .brand p {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        /* main content */
+        .main-content {
+            transition: margin-left 0.3s;
+            background: #f4f7fc;
+            min-height: 100vh;
+        }
+        /* tarjetas ejecutivas */
+        .card-ejecutivo {
+            border: none;
+            border-radius: 24px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: white;
+            margin-bottom: 24px;
+        }
+        .card-ejecutivo:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
+        }
+        .badge-winner {
+            background-color: #1e6f5c;
+            color: white;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+        }
+        .badge-empate {
+            background-color: #6c757d;
+            color: white;
+        }
+        .winner-gold {
+            border-left: 5px solid #e2b842;
+        }
+        .topic-header {
+            background: #f8fafd;
+            border-radius: 20px;
+            padding: 0.6rem 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e9edf2;
+        }
+        .nav-top-btn {
+            background: #0b2b3b;
+            border: none;
+            color: white;
+            border-radius: 50px;
+            padding: 6px 18px;
+            font-weight: 500;
+        }
+        footer {
+            font-size: 0.8rem;
+            border-top: 1px solid #dee2e6;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                width: 260px;
+                height: 100%;
+                left: -280px;
+                top: 0;
+                z-index: 1100;
+            }
+            .sidebar.show {
+                left: 0;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                width: 100%;
+            }
+            .brand h3 {
+                font-size: 1.2rem;
+            }
+        }
+        @media (min-width: 769px) {
+            .sidebar {
+                position: sticky;
+                top: 0;
+                height: 100vh;
+                width: 280px;
+                left: 0;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        .scroll-to-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0b2b3b;
+            color: white;
+            border-radius: 40px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1060;
+        }
+        .hero-stats {
+            background: linear-gradient(135deg, #0a2e3f 0%, #134b5e 100%);
+            border-radius: 32px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar colapsible (mobile) y fijo en desktop -->
+<div class="sidebar" id="sidebarMenu">
+    <div class="brand">
+        <h3><i class="bi bi-chat-square-text-fill"></i> Debate 2026</h3>
+        <p>Análisis ejecutivo · Segunda Vuelta</p>
+    </div>
+    <nav class="nav flex-column">
+        <a class="nav-link" href="#inicio" data-navlink><i class="bi bi-house-door-fill"></i> Panel General</a>
+        <a class="nav-link" href="#reforma" data-navlink><i class="bi bi-bank2"></i> Reforma del Estado</a>
+        <a class="nav-link" href="#juventud" data-navlink><i class="bi bi-people-fill"></i> Juventud y Deporte</a>
+        <a class="nav-link" href="#agro" data-navlink><i class="bi bi-tree-fill"></i> Agricultura y Ambiente</a>
+        <a class="nav-link" href="#infra" data-navlink><i class="bi bi-building"></i> Infraestructura</a>
+        <a class="nav-link" href="#economia" data-navlink><i class="bi bi-graph-up"></i> Economía y Empleo</a>
+        <a class="nav-link" href="#salud" data-navlink><i class="bi bi-heart-pulse-fill"></i> Salud</a>
+        <a class="nav-link" href="#resultados" data-navlink><i class="bi bi-trophy-fill"></i> Ganadores general</a>
+    </nav>
+    <div class="mt-auto p-3 small text-white-50">
+        <i class="bi bi-info-circle"></i> Basado en transcripción oficial<br> JNE · 24 mayo 2026
+    </div>
+</div>
+
+<!-- contenido principal -->
+<div class="main-content" id="mainContent">
+    <!-- navbar superior para colapsar en mobile -->
+    <div class="container-fluid px-4 py-3 bg-white shadow-sm sticky-top" style="z-index: 1020;">
+        <div class="d-flex align-items-center justify-content-between">
+            <button class="btn d-md-none" type="button" id="sidebarToggle" style="background:#0b2b3b; color:white; border-radius:12px;">
+                <i class="bi bi-list fs-4"></i>
+            </button>
+            <h5 class="m-0 fw-semibold"><i class="bi bi-mic-fill text-success"></i> Debate Técnico Perú 2026</h5>
+            <div class="d-none d-md-block">
+                <span class="badge bg-secondary">Análisis profesional</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container px-4 py-4">
+        <!-- SECCION INICIO -->
+        <section id="inicio">
+            <div class="hero-stats p-4 mb-5">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="fw-bold display-6">Debate de equipos técnicos</h1>
+                        <p class="lead">Fuerza Popular vs Juntos por el Perú · 24 de mayo 2026</p>
+                        <p>Análisis completo de la participación por bloque temático, ganadores y conclusiones estratégicas basadas en la transcripción oficial del debate organizado por el JNE.</p>
+                        <div class="mt-3 d-flex gap-3 flex-wrap">
+                            <div><i class="bi bi-people"></i> 12 especialistas</div>
+                            <div><i class="bi bi-grid-3x3-gap-fill"></i> 6 ejes temáticos</div>
+                            <div><i class="bi bi-trophy"></i> Ganadores por bloque</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="bi bi-chat-dots-fill" style="font-size: 5rem; opacity: 0.8;"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LOS 6 BLOQUES (tarjetas completas) -->
+        <!-- Reforma Estado -->
+        <section id="reforma" class="mb-5">
+            <div class="topic-header d-flex justify-content-between align-items-center flex-wrap">
+                <h2 class="h4 fw-bold mb-0"><i class="bi bi-bank2 me-2"></i> Reforma del Estado</h2>
+                <span class="badge-winner mt-1 mt-sm-0"><i class="bi bi-people"></i> Empate técnico</span>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card-ejecutivo p-3 h-100">
+                        <div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-flag-fill" style="color:#d42e12;"></i> <strong class="fs-5">Fuerza Popular</strong></div>
+                        <div class="fw-bold fs-6">Vladimiro Huaroc Portocarrero</div>
+                        <p class="text-secondary small">Ex gobernador regional de Junín</p>
+                        <p class="mt-2">Discurso centrado en la dicotomía "orden vs caos". Propuso un centro de gobierno estratégico y digitalización del Estado. Crítico con la burocracia, pero sus propuestas fueron genéricas y con lectura de papel. Sin embargo, mantuvo solidez narrativa.</p>
+                        <div class="mt-2"><i class="bi bi-chat-quote"></i> “El problema del Perú es que el Estado no funciona para su gente.”</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-ejecutivo p-3 h-100">
+                        <div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-flag-fill" style="color:#2c7a4a;"></i> <strong class="fs-5">Juntos por el Perú</strong></div>
+                        <div class="fw-bold fs-6">Sinesio López Jiménez</div>
+                        <p class="text-secondary small">Sociólogo</p>
+                        <p class="mt-2">Diagnóstico interesante sobre "parlamentarismo de facto" y concentración de poderes en el Congreso. Planteó reformas contra la corrupción y autonomía de organismos. Exposición lenta, problemas de sonido, escasez de propuestas concretas.</p>
+                        <div class="mt-2"><i class="bi bi-chat-quote"></i> “No estamos en un régimen democrático, sino autoritario parlamentario.”</div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-light mt-3 border-start border-4 border-secondary"><i class="bi bi-info-circle-fill me-1"></i> <strong>Análisis:</strong> Ambos desaprovecharon la oportunidad de proponer reformas estructurales detalladas. Diagnóstico superficial, por lo que se declara <strong>empate por bajo rendimiento</strong>.</div>
+        </section>
+
+        <!-- Juventud y Deporte -->
+        <section id="juventud" class="mb-5">
+            <div class="topic-header d-flex justify-content-between align-items-center flex-wrap">
+                <h2 class="h4 fw-bold mb-0"><i class="bi bi-people-fill me-2"></i> Juventud y Deporte</h2>
+                <span class="badge-winner bg-success"><i class="bi bi-trophy"></i> Ganador: Juntos por el Perú</span>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card-ejecutivo p-3 h-100"><div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-flag-fill" style="color:#d42e12;"></i> <strong>Fuerza Popular</strong></div>
+                    <div class="fw-bold">Rosángela Barbarán Reyes</div><p class="text-secondary">Congresista</p><p>Discurso emotivo: “30% de jóvenes golpeados”. Propuso centros COOL, impuesto cero primeros 3 años para emprendedores y modernización técnica. Pero cayó en ataques a Venezuela y descalificaciones. No pudo responder preguntas sobre vivienda y crédito juvenil.</p></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-ejecutivo p-3 h-100"><div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-flag-fill" style="color:#2c7a4a;"></i> <strong>Juntos por el Perú</strong></div>
+                    <div class="fw-bold">Ernesto Alonso Sunini Yerrén</div><p class="text-secondary">Secretario General</p><p>Propuesta concreta: “Mi Primera Chamba” (S/6,150 soles para 100k jóvenes), educación superior como derecho, becas focalizadas. Defendió el deporte con miras a Lima 2027. Mantuvo calma y respondió con datos, sin caer en chicanas.</p></div>
+                </div>
+            </div>
+            <div class="alert alert-light mt-3 border-start border-4 border-success"><i class="bi bi-bar-chart-steps"></i> <strong>Veredicto:</strong> Sunini fue más propositivo y concreto. Barbarán se desvió hacia la confrontación ideológica. <strong>Gana Juntos por el Perú</strong>.</div>
+        </section>
+
+        <!-- Agricultura y medio ambiente -->
+        <section id="agro" class="mb-5">
+            <div class="topic-header d-flex justify-content-between"><h2 class="h4 fw-bold"><i class="bi bi-tree-fill me-2"></i> Agricultura y Medio Ambiente</h2><span class="badge-winner">Ganador: Fuerza Popular</span></div>
+            <div class="row">
+                <div class="col-md-6"><div class="card-ejecutivo p-3 h-100"><div><i class="bi bi-flag-fill" style="color:#d42e12;"></i> <strong>Fuerza Popular – Marco Vinelli Ruiz</strong></div><p class="mt-2">Conocimiento técnico sólido: reactivar PRONAMACHES, represa de Chonta, Chavimochic III, entrega de maquinaria pesada a Juntas de Usuarios. Vinculó a Guarní con Antauro Humala. Discurso directo al agricultor. Dominó el debate.</p></div></div>
+                <div class="col-md-6"><div class="card-ejecutivo p-3 h-100"><div><i class="bi bi-flag-fill" style="color:#2c7a4a;"></i> <strong>Juntos por el Perú – César Guarní Vigo</strong></div><p class="mt-2">Planteó Banco Agrario y derogar la ley antiforestal, pero fue menos preciso y defensivo. Repitió consignas, sin lograr contrarrestar los ataques de Vinelli. Buena intención pero falta de contundencia.</p></div></div>
+            </div>
+            <div class="alert alert-light mt-3 border-start border-4 border-warning">✅ <strong>Análisis:</strong> Vinelli mostró mayor dominio técnico y político; conectó mejor con el votante del agro. <strong>Triunfo claro de Fuerza Popular</strong>.</div>
+        </section>
+
+        <!-- Infraestructura -->
+        <section id="infra" class="mb-5">
+            <div class="topic-header d-flex justify-content-between"><h2 class="h4 fw-bold"><i class="bi bi-building me-2"></i> Infraestructura</h2><span class="badge-empate badge bg-secondary">Empate de alto nivel</span></div>
+            <div class="row g-4">
+                <div class="col-md-6"><div class="card-ejecutivo p-3"><strong>🔵 Fuerza Popular – Carlos Neuhaus</strong><p class="mt-2">Apeló a su éxito en Panamericanos 2019, propuso reactivar obras paralizadas con transparencia, cancelar contratos problemáticos. Pragmático y creíble. Defendió vehículos eléctricos y prioridad al transporte público.</p></div></div>
+                <div class="col-md-6"><div class="card-ejecutivo p-3"><strong>🟢 Juntos por el Perú – Gustavo Guerra García</strong><p class="mt-2">Visión estratégica: corredor bioceánico Chancay – Pucallpa, recuperar gasoducto, pavimentación rural (8,000 km). Crítico con la inestabilidad política como causa de obras paralizadas. Propositivo y ambicioso.</p></div></div>
+            </div>
+            <div class="alert alert-light border-start border-4 border-dark">🏆 Mejor bloque del debate. Neuhaus destacó en credibilidad práctica; Guerra en visión país. <strong>Empate merecido</strong>.</div>
+        </section>
+
+        <!-- Economía y empleo -->
+        <section id="economia" class="mb-5">
+            <div class="topic-header d-flex justify-content-between"><h2 class="h4 fw-bold"><i class="bi bi-graph-up me-2"></i> Economía y Generación de Empleo</h2><span class="badge-winner">Ganador: Fuerza Popular</span></div>
+            <div class="row">
+                <div class="col-md-6"><div class="card-ejecutivo p-3 h-100"><strong>🔵 Fuerza Popular – Luis Carranza Ugarte</strong><p class="mt-2">Contundente con cifras: pobreza estancada en 25.7% (2025). Desnudó contradicciones del plan de JP (sin mención a estabilidad fiscal ni BCR). Defendió equilibrio fiscal, inversión privada y críticas a las propuestas de Francke. Sólido y experimentado.</p></div></div>
+                <div class="col-md-6"><div class="card-ejecutivo p-3 h-100"><strong>🟢 Juntos por el Perú – Pedro Francke</strong><p class="mt-2">Intentó moderar el discurso original del partido (sin estatizaciones, respeto al BCR), pero Carranza le recordó los cambios bruscos de posición. Debate de cifras, pero quedó a la defensiva al explicar la pobreza no reducida.</p></div></div>
+            </div>
+            <div class="alert alert-light mt-2 border-start border-4 border-warning">📊 Carranza mostró mayor consistencia y evidenció el viraje programático de JP. <strong>Gana Fuerza Popular</strong>.</div>
+        </section>
+
+        <!-- Salud -->
+        <section id="salud" class="mb-5">
+            <div class="topic-header d-flex justify-content-between"><h2 class="h4 fw-bold"><i class="bi bi-heart-pulse-fill me-2"></i> Salud</h2><span class="badge-winner bg-success">Ganador: Juntos por el Perú</span></div>
+            <div class="row">
+                <div class="col-md-6"><div class="card-ejecutivo p-3"><strong>🔵 Fuerza Popular – José Recoba</strong><p class="mt-2">Discurso emotivo sobre el “caos” en salud: anemia, colas, 10 ministros. Propuso mapeo casa por casa y telemedicina. Sin embargo, no pudo responder al cambio de eje de Ceballos.</p></div></div>
+                <div class="col-md-6"><div class="card-ejecutivo p-3"><strong>🟢 Juntos por el Perú – Hernando Ceballos</strong><p class="mt-2">Cambió la narrativa: no defendió gestión pasada, sino que puso la responsabilidad en Fuerza Popular por controlar el Congreso y generar inestabilidad. Preguntó directamente por blindajes y falta de fiscalización. Descolocó a Recoba. Ganó por KO técnico.</p></div></div>
+            </div>
+            <div class="alert alert-light border-start border-4 border-success">💡 Ceballos logró instalar el debate político y responsabilizar al fujimorismo de la crisis. <strong>Victoria estratégica para Juntos por el Perú</strong>.</div>
+        </section>
+
+        <!-- RESULTADOS FINALES / GANADORES GENERALES -->
+        <section id="resultados" class="my-5 pt-3">
+            <div class="card-ejecutivo p-4 bg-white shadow">
+                <h3 class="fw-bold mb-4"><i class="bi bi-trophy-fill text-warning"></i> Marcador general por bloques</h3>
+                <div class="row text-center mb-4">
+                    <div class="col-6 border-end">
+                        <div class="display-4 fw-bold" style="color:#d42e12;">2</div>
+                        <p class="fw-semibold">Fuerza Popular</p>
+                        <small>Agricultura · Economía</small>
+                    </div>
+                    <div class="col-6">
+                        <div class="display-4 fw-bold" style="color:#2c7a4a;">2</div>
+                        <p class="fw-semibold">Juntos por el Perú</p>
+                        <small>Juventud · Salud</small>
+                    </div>
+                </div>
+                <div class="text-center mb-3"><span class="badge bg-secondary fs-6 p-2 px-3">2 Empates técnicos</span> <span class="badge bg-info text-dark">Reforma del Estado · Infraestructura</span></div>
+                <hr>
+                <div class="mt-3">
+                    <h5>🏅 Análisis ejecutivo final</h5>
+                    <p>El debate mostró a una <strong>Fuerza Popular</strong> muy disciplinada en su mensaje "orden vs caos", sólida en economía y agro, pero vulnerable en salud cuando el oponente cambió el eje político. <strong>Juntos por el Perú</strong> logró propuestas concretas en juventud y una narrativa ofensiva en salud, además de equilibrar en infraestructura. El resultado fue un empate técnico con matices: ninguno logró una victoria arrolladora, pero ambos mostraron fortalezas que podrían mover votos indecisos.</p>
+                    <p class="mt-2 fst-italic">Basado en la transcripción del debate técnico organizado por el JNE (24 mayo 2026), con participación de 12 especialistas.</p>
+                </div>
+                <div class="mt-4 row g-3">
+                    <div class="col-md-6">
+                        <div class="bg-light p-3 rounded">
+                            <i class="bi bi-star-fill text-warning"></i> <strong>Mejor desempeño técnico:</strong> Marco Vinelli (FP) y Carlos Neuhaus (FP) / Gustavo Guerra (JP) destacaron en manejo de datos y visión.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-light p-3 rounded">
+                            <i class="bi bi-chat-dots-fill text-primary"></i> <strong>Momento clave:</strong> Hernando Ceballos (JP) cambió el debate de salud hacia la responsabilidad política de Fuerza Popular, logrando descolocar a su rival.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="py-4 text-center text-muted mt-5">
+            <p>© Análisis independiente basado en la transcripción oficial del debate técnico – Segunda Vuelta Presidencial 2026. Contenido elaborado con datos de la transmisión del JNE.</p>
+        </footer>
+    </div>
+    <div class="scroll-to-top" id="scrollTop"><i class="bi bi-arrow-up-short fs-3"></i></div>
+</div>
+
+<script>
+    // Toggle sidebar en móvil
+    const toggleBtn = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebarMenu');
+    if(toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('show');
+        });
+    }
+    // Cerrar sidebar al hacer click en enlace (mobile)
+    const navLinks = document.querySelectorAll('[data-navlink]');
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            if(window.innerWidth < 769) {
+                sidebar.classList.remove('show');
+            }
+            const targetId = link.getAttribute('href');
+            if(targetId && targetId !== '#') {
+                e.preventDefault();
+                const element = document.querySelector(targetId);
+                if(element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
+    });
+    // scroll top
+    const scrollBtn = document.getElementById('scrollTop');
+    scrollBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    // highlight active nav on scroll (simple)
+    const sections = document.querySelectorAll('section[id]');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        const scrollPos = window.scrollY + 120;
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            if(scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                current = section.getAttribute('id');
+            }
+        });
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            const href = link.getAttribute('href').substring(1);
+            if(href === current) link.classList.add('active');
+        });
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
