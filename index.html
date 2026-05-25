@@ -16,7 +16,7 @@
             background-color: #f4f7fc;
             overflow-x: hidden;
         }
-        /* Sidebar ejecutivo oscuro */
+        /* Sidebar ejecutivo oscuro - CORREGIDO para desktop */
         .sidebar {
             background: linear-gradient(180deg, #0b2b3b 0%, #0a1c2a 100%);
             color: white;
@@ -58,11 +58,12 @@
             font-size: 0.75rem;
             opacity: 0.7;
         }
-        /* main content */
+        /* main content - CORREGIDO: margen izquierdo en desktop */
         .main-content {
             transition: margin-left 0.3s;
             background: #f4f7fc;
             min-height: 100vh;
+            width: 100%;
         }
         /* tarjetas ejecutivas */
         .card-ejecutivo {
@@ -89,9 +90,6 @@
             background-color: #6c757d;
             color: white;
         }
-        .winner-gold {
-            border-left: 5px solid #e2b842;
-        }
         .topic-header {
             background: #f8fafd;
             border-radius: 20px;
@@ -99,49 +97,24 @@
             margin-bottom: 1rem;
             border-bottom: 1px solid #e9edf2;
         }
-        .nav-top-btn {
+        /* Botón de menú para móvil */
+        .sidebar-toggle-btn {
             background: #0b2b3b;
             border: none;
             color: white;
-            border-radius: 50px;
-            padding: 6px 18px;
+            border-radius: 12px;
+            padding: 8px 16px;
             font-weight: 500;
         }
-        footer {
-            font-size: 0.8rem;
-            border-top: 1px solid #dee2e6;
+        /* Header superior - solo visible en móvil */
+        .mobile-header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
         }
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                width: 260px;
-                height: 100%;
-                left: -280px;
-                top: 0;
-                z-index: 1100;
-            }
-            .sidebar.show {
-                left: 0;
-            }
-            .main-content {
-                margin-left: 0 !important;
-                width: 100%;
-            }
-            .brand h3 {
-                font-size: 1.2rem;
-            }
-        }
-        @media (min-width: 769px) {
-            .sidebar {
-                position: sticky;
-                top: 0;
-                height: 100vh;
-                width: 280px;
-                left: 0;
-            }
-            .main-content {
-                margin-left: 0;
-            }
+        .hero-stats {
+            background: linear-gradient(135deg, #0a2e3f 0%, #134b5e 100%);
+            border-radius: 32px;
+            color: white;
         }
         .scroll-to-top {
             position: fixed;
@@ -159,16 +132,90 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             z-index: 1060;
         }
-        .hero-stats {
-            background: linear-gradient(135deg, #0a2e3f 0%, #134b5e 100%);
-            border-radius: 32px;
-            color: white;
+        
+        /* ========== RESPONSIVE CORREGIDO ========== */
+        /* Desktop: sidebar fijo a la izquierda, main con margen */
+        @media (min-width: 769px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 280px;
+                height: 100vh;
+                overflow-y: auto;
+            }
+            .main-content {
+                margin-left: 280px !important;
+                width: calc(100% - 280px);
+            }
+            .mobile-header {
+                display: none !important;
+            }
+            .container-fluid.px-4.py-3 {
+                display: none !important;
+            }
+            /* ajuste de padding para desktop */
+            .container.px-4.py-4 {
+                padding-top: 1.5rem !important;
+            }
+        }
+        
+        /* Móvil: sidebar oculta, se muestra con toggle, header visible */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                width: 280px;
+                height: 100%;
+                left: -280px;
+                top: 0;
+                z-index: 1100;
+                overflow-y: auto;
+            }
+            .sidebar.show {
+                left: 0;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                width: 100%;
+            }
+            .brand h3 {
+                font-size: 1.2rem;
+            }
+            .mobile-header {
+                display: block;
+            }
+            .desktop-only-header {
+                display: none;
+            }
+        }
+        
+        /* Overlay para móvil cuando sidebar está abierto */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1040;
+            display: none;
+        }
+        .sidebar-overlay.show {
+            display: block;
+        }
+        
+        footer {
+            font-size: 0.8rem;
+            border-top: 1px solid #dee2e6;
         }
     </style>
 </head>
 <body>
 
-<!-- Sidebar colapsible (mobile) y fijo en desktop -->
+<!-- Overlay para cerrar sidebar en móvil -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- Sidebar colapsible (mobile) / fijo en desktop -->
 <div class="sidebar" id="sidebarMenu">
     <div class="brand">
         <h3><i class="bi bi-chat-square-text-fill"></i> Debate 2026</h3>
@@ -191,16 +238,14 @@
 
 <!-- contenido principal -->
 <div class="main-content" id="mainContent">
-    <!-- navbar superior para colapsar en mobile -->
-    <div class="container-fluid px-4 py-3 bg-white shadow-sm sticky-top" style="z-index: 1020;">
+    <!-- Header superior SOLO para móvil (en desktop se oculta) -->
+    <div class="mobile-header py-3 px-4 shadow-sm sticky-top" style="z-index: 1020;">
         <div class="d-flex align-items-center justify-content-between">
-            <button class="btn d-md-none" type="button" id="sidebarToggle" style="background:#0b2b3b; color:white; border-radius:12px;">
+            <button class="btn sidebar-toggle-btn" type="button" id="sidebarToggle">
                 <i class="bi bi-list fs-4"></i>
             </button>
-            <h5 class="m-0 fw-semibold"><i class="bi bi-mic-fill text-success"></i> Debate Técnico Perú 2026</h5>
-            <div class="d-none d-md-block">
-                <span class="badge bg-secondary">Análisis profesional</span>
-            </div>
+            <h6 class="m-0 fw-semibold"><i class="bi bi-mic-fill text-success"></i> Debate Técnico Perú 2026</h6>
+            <div style="width: 40px;"></div>
         </div>
     </div>
 
@@ -226,7 +271,7 @@
             </div>
         </section>
 
-        <!-- LOS 6 BLOQUES (tarjetas completas) -->
+        <!-- LOS 6 BLOQUES -->
         <!-- Reforma Estado -->
         <section id="reforma" class="mb-5">
             <div class="topic-header d-flex justify-content-between align-items-center flex-wrap">
@@ -265,11 +310,11 @@
             <div class="row g-4">
                 <div class="col-md-6">
                     <div class="card-ejecutivo p-3 h-100"><div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-flag-fill" style="color:#d42e12;"></i> <strong>Fuerza Popular</strong></div>
-                    <div class="fw-bold">Rosángela Barbarán Reyes</div><p class="text-secondary">Congresista</p><p>Discurso emotivo: “30% de jóvenes golpeados”. Propuso centros COOL, impuesto cero primeros 3 años para emprendedores y modernización técnica. Pero cayó en ataques a Venezuela y descalificaciones. No pudo responder preguntas sobre vivienda y crédito juvenil.</p></div>
+                    <div class="fw-bold">Rosángela Barbarán Reyes</div><p class="text-secondary">Congresista</p><p>Discurso emotivo: "30% de jóvenes golpeados". Propuso centros COOL, impuesto cero primeros 3 años para emprendedores y modernización técnica. Pero cayó en ataques a Venezuela y descalificaciones. No pudo responder preguntas sobre vivienda y crédito juvenil.</p></div>
                 </div>
                 <div class="col-md-6">
                     <div class="card-ejecutivo p-3 h-100"><div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-flag-fill" style="color:#2c7a4a;"></i> <strong>Juntos por el Perú</strong></div>
-                    <div class="fw-bold">Ernesto Alonso Sunini Yerrén</div><p class="text-secondary">Secretario General</p><p>Propuesta concreta: “Mi Primera Chamba” (S/6,150 soles para 100k jóvenes), educación superior como derecho, becas focalizadas. Defendió el deporte con miras a Lima 2027. Mantuvo calma y respondió con datos, sin caer en chicanas.</p></div>
+                    <div class="fw-bold">Ernesto Alonso Sunini Yerrén</div><p class="text-secondary">Secretario General</p><p>Propuesta concreta: "Mi Primera Chamba" (S/6,150 soles para 100k jóvenes), educación superior como derecho, becas focalizadas. Defendió el deporte con miras a Lima 2027. Mantuvo calma y respondió con datos, sin caer en chicanas.</p></div>
                 </div>
             </div>
             <div class="alert alert-light mt-3 border-start border-4 border-success"><i class="bi bi-bar-chart-steps"></i> <strong>Veredicto:</strong> Sunini fue más propositivo y concreto. Barbarán se desvió hacia la confrontación ideológica. <strong>Gana Juntos por el Perú</strong>.</div>
@@ -309,13 +354,13 @@
         <section id="salud" class="mb-5">
             <div class="topic-header d-flex justify-content-between"><h2 class="h4 fw-bold"><i class="bi bi-heart-pulse-fill me-2"></i> Salud</h2><span class="badge-winner bg-success">Ganador: Juntos por el Perú</span></div>
             <div class="row">
-                <div class="col-md-6"><div class="card-ejecutivo p-3"><strong>🔵 Fuerza Popular – José Recoba</strong><p class="mt-2">Discurso emotivo sobre el “caos” en salud: anemia, colas, 10 ministros. Propuso mapeo casa por casa y telemedicina. Sin embargo, no pudo responder al cambio de eje de Ceballos.</p></div></div>
+                <div class="col-md-6"><div class="card-ejecutivo p-3"><strong>🔵 Fuerza Popular – José Recoba</strong><p class="mt-2">Discurso emotivo sobre el "caos" en salud: anemia, colas, 10 ministros. Propuso mapeo casa por casa y telemedicina. Sin embargo, no pudo responder al cambio de eje de Ceballos.</p></div></div>
                 <div class="col-md-6"><div class="card-ejecutivo p-3"><strong>🟢 Juntos por el Perú – Hernando Ceballos</strong><p class="mt-2">Cambió la narrativa: no defendió gestión pasada, sino que puso la responsabilidad en Fuerza Popular por controlar el Congreso y generar inestabilidad. Preguntó directamente por blindajes y falta de fiscalización. Descolocó a Recoba. Ganó por KO técnico.</p></div></div>
             </div>
             <div class="alert alert-light border-start border-4 border-success">💡 Ceballos logró instalar el debate político y responsabilizar al fujimorismo de la crisis. <strong>Victoria estratégica para Juntos por el Perú</strong>.</div>
         </section>
 
-        <!-- RESULTADOS FINALES / GANADORES GENERALES -->
+        <!-- RESULTADOS FINALES -->
         <section id="resultados" class="my-5 pt-3">
             <div class="card-ejecutivo p-4 bg-white shadow">
                 <h3 class="fw-bold mb-4"><i class="bi bi-trophy-fill text-warning"></i> Marcador general por bloques</h3>
@@ -364,17 +409,30 @@
     // Toggle sidebar en móvil
     const toggleBtn = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebarMenu');
+    const overlay = document.getElementById('sidebarOverlay');
+    
     if(toggleBtn) {
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('show');
+            overlay.classList.toggle('show');
         });
     }
+    
+    // Cerrar sidebar al hacer click en overlay
+    if(overlay) {
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('show');
+            overlay.classList.remove('show');
+        });
+    }
+    
     // Cerrar sidebar al hacer click en enlace (mobile)
     const navLinks = document.querySelectorAll('[data-navlink]');
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             if(window.innerWidth < 769) {
                 sidebar.classList.remove('show');
+                if(overlay) overlay.classList.remove('show');
             }
             const targetId = link.getAttribute('href');
             if(targetId && targetId !== '#') {
@@ -386,12 +444,16 @@
             }
         });
     });
+    
     // scroll top
     const scrollBtn = document.getElementById('scrollTop');
-    scrollBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-    // highlight active nav on scroll (simple)
+    if(scrollBtn) {
+        scrollBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+    
+    // highlight active nav on scroll
     const sections = document.querySelectorAll('section[id]');
     window.addEventListener('scroll', () => {
         let current = '';
